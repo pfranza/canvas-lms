@@ -23,8 +23,9 @@ module Lti
       HELLO_WORLD = "LtiHelloWorldNotice"
       ASSET_PROCESSOR_SUBMISSION = "LtiAssetProcessorSubmissionNotice"
       CONTEXT_COPY = "LtiContextCopyNotice"
+      RESOURCE_COPY = "LtiResourceCopyNotice"
 
-      ALL = [HELLO_WORLD, ASSET_PROCESSOR_SUBMISSION, CONTEXT_COPY].freeze
+      ALL = [HELLO_WORLD, ASSET_PROCESSOR_SUBMISSION, CONTEXT_COPY, RESOURCE_COPY].freeze
     end
   end
 end
