@@ -34,7 +34,8 @@ To register a Notice Handler (webhook), the tool has to call the platform notifi
     "notice_types_supported": [
       "LtiHelloWorldNotice",
       "LtiAssetProcessorSubmissionNotice",
-      "LtiContextCopyNotice"
+      "LtiContextCopyNotice",
+      "LtiResourceCopyNotice"
     ]
   },
 ...
@@ -149,3 +150,39 @@ Example notice content:
 `context`: metadata about the new LTI Context (Course)
 
 `origin_contexts`: array with 1 element: LTI Context id of the source course
+
+### LtiResourceCopyNotice
+
+LtiResourceCopyNotice is sent to registered notice handlers when an LTI resource is copied or re-copied into a course.
+
+Example notice content:
+
+```json
+{
+  "https://purl.imsglobal.org/spec/lti/claim/version": "1.3.0",
+  "https://purl.imsglobal.org/spec/lti/claim/notice": {
+    "id": "12345678-1234-1234-1234-1234567890ab",
+    "timestamp": "2025-03-19T11:24:25Z",
+    "type": "LtiResourceCopyNotice"
+  },
+  "https://purl.imsglobal.org/spec/lti/claim/context": {
+    "id": "target_context_id"
+  },
+  "https://purl.imsglobal.org/spec/lti/claim/resource_id": "target_resource_id",
+  "https://purl.imsglobal.org/spec/lti/claim/origin_resource_ids": [
+    {
+      "context": "source_context_id",
+      "resource_id": "source_resource_id"
+    }
+  ]
+}
+```
+
+#### Claims
+
+`context`: metadata about the target context
+
+`resource_id`: LTI resource id created in the target context
+
+`origin_resource_ids`: array of objects describing the origin LTI resource and context
+

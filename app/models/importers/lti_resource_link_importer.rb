@@ -70,6 +70,18 @@ module Importers
       resource_link_for_course.custom =
         Lti::DeepLinkingUtil.validate_custom_params(lti_resource_link["custom"])
       resource_link_for_course.save
+
+      if migration.context.root_account.feature_enabled?(:lti_resource_copy_notice)
+        copied_at = (migration.started_at || Time.zone.now).iso8601
+        notice = Lti::Pns::LtiResourceCopyNoticeBuilder.new(
+          source_context: migration.source_course,
+          source_resource_id: lti_resource_link["lookup_uuid"],
+          target_context: migration.context,
+          target_resource_id: resource_link_for_course.lookup_uuid,
+          copied_at: copied_at
+        )
+        Lti::PlatformNotificationService.notify_tools_in_course(migration.context, notice)
+      end
     end
 
     def self.find_resource_link_from_assignment_context(resource_links_from_assignments, lookup_uuid)

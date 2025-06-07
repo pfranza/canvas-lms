@@ -120,6 +120,23 @@ describe Importers::LtiResourceLinkImporter do
           expect(destination_course.lti_resource_links.first.custom).to eq custom_params
         end
       end
+
+      context "with lti_resource_copy_notice enabled" do
+        before do
+          destination_course.root_account.enable_feature!(:lti_resource_copy_notice)
+          migration.started_at = Time.zone.now
+          allow(Lti::PlatformNotificationService).to receive(:notify_tools_in_course)
+        end
+
+        it "sends a resource copy notice" do
+          expect(Lti::PlatformNotificationService).to receive(:notify_tools_in_course).with(
+            destination_course,
+            instance_of(Lti::Pns::LtiResourceCopyNoticeBuilder)
+          )
+
+          subject
+        end
+      end
     end
   end
 
